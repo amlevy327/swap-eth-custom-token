@@ -137,10 +137,38 @@ const pendingBets = state => {
 export const createdBetsForAccountSelector = createSelector(
     pendingBets, account,
     (pendingBets, account) => {
-    pendingBets = pendingBets.filter((b) => b.maker === account || b.taker === account || b.taker === '0x0000000000000000000000000000000000000000')
+    pendingBets = pendingBets.filter((b) => b.maker === account || b.taker === account || b.taker === '0x0000000000000000000000000000000000000000') // TODO: check this
+    pendingBets = decorateCreatedBetsForAccount(pendingBets, account)
+    console.log("pendingBets", pendingBets)
     return(pendingBets)
     }
 )
+
+const decorateCreatedBetsForAccount = (pendingBets, account) => {
+    return(
+        pendingBets.map((bet) => {
+            bet = addButtonText(bet, account)
+        return bet
+      })
+    )
+}
+
+const addButtonText = (bet, account) => {
+    let buttonText
+  
+    if (bet.maker === account) {
+      buttonText = "Cancel"
+    } else {
+      buttonText = "Accept"
+    }
+
+    console.log('buttonText', buttonText)
+  
+    return({
+      ...bet,
+      buttonText
+    })
+  }
 
 // bets: open - all
 

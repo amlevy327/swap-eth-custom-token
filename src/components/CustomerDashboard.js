@@ -25,9 +25,11 @@ const showPendingBets = (props) => {
         return(
           <tr className={`nft-${bet.id}`} key={bet.id}>
             <td>{bet.id}</td>
+            <td>{bet.name}</td>
             <td>{bet.maker}</td>
             <td>{bet.amountMaker}</td>
             <td>{bet.amountTaker}</td>
+            <td>{bet.buttonText}</td>
           </tr>
         )
       })
@@ -57,6 +59,7 @@ class CustomerDashboard extends Component {
                 <thead>
                   <tr>
                     <th>ID</th>
+                    <th>Name</th>
                     <th>Maker</th>
                     <th>Amount Maker</th>
                     <th>Amount Taker</th>
