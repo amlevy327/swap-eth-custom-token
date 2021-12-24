@@ -20,6 +20,8 @@ module.exports = async function(callback) {
     const user2 = accounts[2]
     const user3 = accounts[3]
 
+    const winner = user1
+
     console.log('owner: ', owner)
     console.log('user1: ', user1)
     console.log('user2: ', user2)
@@ -92,8 +94,14 @@ module.exports = async function(callback) {
     //result = await exchange.bets('1')
     //console.log("bet 1:", result)
 
-    result = await exchange.acceptBet('1', { from: user2 })
+    await exchange.acceptBet('1', { from: user2 })
     console.log('Bet 1 accepted by user2')
+
+    await exchange.submitWinner('1', winner, { from: user2 })
+    console.log('Bet 1 winner submitted by user2: user1 wins')
+
+    await exchange.submitWinner('1', winner, { from: user1 })
+    console.log('Bet 1 winner submitted by user1: user1 wins - should trigger closing')
 
   } catch (error) {
     console.log(error)

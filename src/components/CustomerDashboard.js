@@ -5,6 +5,7 @@ import Spinner from './Spinner'
 import {
   accountSelector,
   allBetTypesLoadedSelector,
+  closedBetsForAccountSelector,
   createdBetsForAccountSelector,
   openBetsForAccountSelector
 } from '../store/selectors'
@@ -67,6 +68,33 @@ const showActiveBets = (props) => {
   )
 }
 
+const showClosedBets = (props) => {
+  const {
+    closedBets
+  } = props
+
+  console.log('closedBets: ', closedBets.length)
+
+  return(
+    <tbody>
+      { closedBets.map((bet) => {
+        return(
+          <tr className={`nft-${bet.id}`} key={bet.id}>
+            <td>{bet.id}</td>
+            <td>{bet.name}</td>
+            <td>{bet.maker}</td>
+            <td>{bet.taker}</td>
+            <td>{bet.amountMaker}</td>
+            <td>{bet.amountTaker}</td>
+            <td>{bet.winnerMaker}</td>
+          </tr>
+        )
+      })
+      }
+    </tbody>
+  )
+}
+
 class CustomerDashboard extends Component {
   // componentWillMount() {
   //   this.loadBlockchainData(this.props)
@@ -117,15 +145,16 @@ class CustomerDashboard extends Component {
               <table className="table table-dark table-sm small">
                 <thead>
                   <tr>
-                    <th>Image</th>
+                  <th>ID</th>
                     <th>Name</th>
-                    <th>NFT ID</th>
-                    <th># Owned</th>
-                    <th># Minted</th>
-                    <th># For Sale</th>
+                    <th>Maker</th>
+                    <th>Taker</th>
+                    <th>Amount Maker</th>
+                    <th>Amount Taker</th>
+                    <th>Winner</th>
                   </tr>
                 </thead>
-                {/* { this.props.showAll ? showMyNFTs(this.props) : <Spinner type="table"/> } */}
+                { this.props.showAll ? showClosedBets(this.props) : <Spinner type="table"/> }
               </table>
             </Tab>
           </Tabs>
@@ -141,7 +170,8 @@ function mapStateToProps(state) {
     showAll: allBetTypesLoaded,
     account: accountSelector(state),
     createdBets: createdBetsForAccountSelector(state),
-    activeBets: openBetsForAccountSelector(state)
+    activeBets: openBetsForAccountSelector(state),
+    closedBets: closedBetsForAccountSelector(state)
   }
 }
 
