@@ -92,6 +92,9 @@ module.exports = async function(callback) {
     //result = await exchange.bets('1')
     //console.log("bet 1:", result)
 
+    result = await exchange.acceptBet('1', { from: user2 })
+    console.log('Bet 1 accepted by user2')
+
   } catch (error) {
     console.log(error)
   }

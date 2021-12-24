@@ -5,7 +5,8 @@ import Spinner from './Spinner'
 import {
   accountSelector,
   allBetTypesLoadedSelector,
-  createdBetsForAccountSelector
+  createdBetsForAccountSelector,
+  openBetsForAccountSelector
 } from '../store/selectors'
 // import {
 // } from '../store/interactions'
@@ -27,9 +28,37 @@ const showPendingBets = (props) => {
             <td>{bet.id}</td>
             <td>{bet.name}</td>
             <td>{bet.maker}</td>
+            <td>{bet.taker}</td>
             <td>{bet.amountMaker}</td>
             <td>{bet.amountTaker}</td>
             <td>{bet.buttonText}</td>
+          </tr>
+        )
+      })
+      }
+    </tbody>
+  )
+}
+
+const showActiveBets = (props) => {
+  const {
+    activeBets
+  } = props
+
+  console.log('activeBets: ', activeBets.length)
+
+  return(
+    <tbody>
+      { activeBets.map((bet) => {
+        return(
+          <tr className={`nft-${bet.id}`} key={bet.id}>
+            <td>{bet.id}</td>
+            <td>{bet.name}</td>
+            <td>{bet.maker}</td>
+            <td>{bet.taker}</td>
+            <td>{bet.amountMaker}</td>
+            <td>{bet.amountTaker}</td>
+            <td>Submit Winner</td>
           </tr>
         )
       })
@@ -61,6 +90,7 @@ class CustomerDashboard extends Component {
                     <th>ID</th>
                     <th>Name</th>
                     <th>Maker</th>
+                    <th>Taker</th>
                     <th>Amount Maker</th>
                     <th>Amount Taker</th>
                   </tr>
@@ -72,17 +102,15 @@ class CustomerDashboard extends Component {
               <table className="table table-dark table-sm small">
                 <thead>
                   <tr>
-                    <th>Image</th>
+                    <th>ID</th>
                     <th>Name</th>
-                    <th>Listing ID</th>
-                    <th># For Sale</th>
-                    <th>Price (eth)</th>
-                    <th>Royalty Amount (eth)</th>
-                    <th>Total Cost (eth)</th>
-                    <th></th>
+                    <th>Maker</th>
+                    <th>Taker</th>
+                    <th>Amount Maker</th>
+                    <th>Amount Taker</th>
                   </tr>
                 </thead>
-                {/* { this.props.showAll ? showAllOpenListings(this.props) : <Spinner type="table"/> } */}
+                { this.props.showAll ? showActiveBets(this.props) : <Spinner type="table"/> }
               </table>
             </Tab>
             <Tab eventKey="closed" title="Closed" className="bg-dark">
@@ -112,7 +140,8 @@ function mapStateToProps(state) {
   return {
     showAll: allBetTypesLoaded,
     account: accountSelector(state),
-    createdBets: createdBetsForAccountSelector(state)
+    createdBets: createdBetsForAccountSelector(state),
+    activeBets: openBetsForAccountSelector(state)
   }
 }
 
