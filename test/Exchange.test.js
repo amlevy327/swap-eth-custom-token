@@ -10,7 +10,8 @@ require('chai')
 contract('Exchange', ([deployer, user1, user2, user3]) => {
   let exchange
   let allEvents
-  let userStartValue = 100
+  let userStartValue = 1000
+  let name = "Bears +3.5"
 
   const EVM_REVERT = 'VM Exception while processing transaction: revert'
   let ADDRESS_0x0 = '0x0000000000000000000000000000000000000000'
@@ -154,7 +155,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
 
     describe('Success', () => {
       beforeEach(async ()=> {
-        result = await exchange.createBet(token.address, user2, amountMaker, amountTaker, { from: user1 })
+        result = await exchange.createBet(token.address, user2, amountMaker, amountTaker, name, { from: user1 })
       })
 
       it('bet created with _taker as user', async () => {
@@ -166,7 +167,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
         bet.amountMaker.toString().should.equal(amountMaker.toString(), 'amount maker is correct')
         bet.amountTaker.toString().should.equal(amountTaker.toString(), 'amount taker is correct')
         bet.amountDeposit.toString().should.equal(DEPOSIT.toString(), 'amount deposit is correct')
-        bet.accepted.should.equal(false, 'accepted is correct')
+        bet.name.should.equal(name, 'name is correct')
         bet.winnerMaker.toString().should.equal(ADDRESS_0x0, 'winner maker is 0x0')
         bet.winnerTaker.toString().should.equal(ADDRESS_0x0, 'winner taker is 0x0')
       })
@@ -182,7 +183,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
-            accepted: false,
+            name: name,
             winnerMaker: ADDRESS_0x0,
             winnerTaker: ADDRESS_0x0
           })
@@ -199,7 +200,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
       })
 
       it('bet created with _taker as 0x0', async () => {
-        result = await exchange.createBet(token.address, ADDRESS_0x0, amountMaker, amountTaker, { from: user1 })
+        result = await exchange.createBet(token.address, ADDRESS_0x0, amountMaker, amountTaker, name, { from: user1 })
         const bet = await exchange.bets('2')
         bet.id.toString().should.equal('2', 'id is correct')
         bet.token.toString().should.equal(token.address.toString(), 'token address is correct')
@@ -208,7 +209,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
         bet.amountMaker.toString().should.equal(amountMaker.toString(), 'amount maker is correct')
         bet.amountTaker.toString().should.equal(amountTaker.toString(), 'amount taker is correct')
         bet.amountDeposit.toString().should.equal(DEPOSIT.toString(), 'amount deposit is correct')
-        bet.accepted.should.equal(false, 'accepted is correct')
+        bet.name.should.equal(name, 'name is correct')
         bet.winnerMaker.toString().should.equal(ADDRESS_0x0, 'winner maker is 0x0')
         bet.winnerTaker.toString().should.equal(ADDRESS_0x0, 'winner taker is 0x0')
       })
@@ -237,7 +238,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
       // deposit
       await token.approve(exchange.address, amountTransfer, { from: user1 })
       await exchange.depositToken(token.address, amountTransfer, { from: user1 })
-      await exchange.createBet(token.address, user2, amountMaker, amountTaker, { from: user1 })
+      await exchange.createBet(token.address, user2, amountMaker, amountTaker, name, { from: user1 })
     })
 
     describe('Success', () => {
@@ -261,7 +262,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
-            accepted: false,
+            name: name,
             winnerMaker: ADDRESS_0x0,
             winnerTaker: ADDRESS_0x0
           })
@@ -316,7 +317,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
 
     describe('Success - taker is already set', () => {
       beforeEach(async () => {
-        await exchange.createBet(token.address, user2, amountMaker, amountTaker, { from: user1 })
+        await exchange.createBet(token.address, user2, amountMaker, amountTaker, name, { from: user1 })
         result = await exchange.acceptBet('1', { from: user2 })
       })
 
@@ -336,6 +337,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
+            name: name,
             winnerMaker: ADDRESS_0x0,
             winnerTaker: ADDRESS_0x0
           })
@@ -354,7 +356,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
 
     describe('Success - taker is not set', () => {
       beforeEach(async () => {
-        await exchange.createBet(token.address, ADDRESS_0x0, amountMaker, amountTaker, { from: user1 })
+        await exchange.createBet(token.address, ADDRESS_0x0, amountMaker, amountTaker, name, { from: user1 })
         result = await exchange.acceptBet('1', { from: user2 })
       })
 
@@ -374,6 +376,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
+            name: name,
             winnerMaker: ADDRESS_0x0,
             winnerTaker: ADDRESS_0x0
           })
@@ -392,7 +395,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
 
     describe('Failure', () => {
       beforeEach(async () => {
-        await exchange.createBet(token.address, user2, amountMaker, amountTaker, { from: user1 })
+        await exchange.createBet(token.address, user2, amountMaker, amountTaker, name, { from: user1 })
         
       })
 
@@ -436,7 +439,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
       await exchange.depositToken(token.address, amountTransferUser1, { from: user1 })
       await exchange.depositToken(token.address, amountTransferUser2, { from: user2 })
       
-      await exchange.createBet(token.address, user2, amountMaker, amountTaker, { from: user1 })
+      await exchange.createBet(token.address, user2, amountMaker, amountTaker, name, { from: user1 })
       await exchange.acceptBet('1', { from: user2 })
     })
 
@@ -454,6 +457,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
         bet.amountMaker.toString().should.equal(amountMaker.toString(), 'amount maker is correct')
         bet.amountTaker.toString().should.equal(amountTaker.toString(), 'amount taker is correct')
         bet.amountDeposit.toString().should.equal(DEPOSIT.toString(), 'amount deposit is correct')
+        bet.name.should.equal(name, 'name is correct')
         bet.winnerMaker.toString().should.equal(winner.toString(), 'winner maker is user1')
         bet.winnerTaker.toString().should.equal(ADDRESS_0x0, 'winner taker is 0x0')
       })
@@ -469,6 +473,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
+            name: name,
             winnerMaker: winner.toString(),
             winnerTaker: ADDRESS_0x0
           })
@@ -489,6 +494,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
         bet.amountMaker.toString().should.equal(amountMaker.toString(), 'amount maker is correct')
         bet.amountTaker.toString().should.equal(amountTaker.toString(), 'amount taker is correct')
         bet.amountDeposit.toString().should.equal(DEPOSIT.toString(), 'amount deposit is correct')
+        bet.name.toString().should.equal(name.toString(), 'name is correct')
         bet.winnerMaker.toString().should.equal(ADDRESS_0x0, 'winner maker is 0x0')
         bet.winnerTaker.toString().should.equal(winner.toString(), 'winner taker is user1')
       })
@@ -504,6 +510,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
+            name: name,
             winnerMaker: ADDRESS_0x0,
             winnerTaker: winner.toString()
           })
@@ -532,6 +539,7 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
             amountMaker: amountMaker.toString(),
             amountTaker: amountTaker.toString(),
             depositAmount: DEPOSIT.toString(),
+            name: name,
             winnerMaker: winner.toString(),
             winnerTaker: winner.toString()
           })
@@ -555,16 +563,16 @@ contract('Exchange', ([deployer, user1, user2, user3]) => {
 
     describe('Failure', () => {
       it('rejects if id does not exist', async () => {
-        result = await exchange.submitWinner('100', user2, { from: user1 }).should.be.rejectedWith(EVM_REVERT)
+        result = await exchange.submitWinner('5000', user2, { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
 
       it('rejects if not accepted', async () => {
-        await exchange.createBet(token.address, user2, '1', '1', { from: user1 })
+        await exchange.createBet(token.address, user2, '1', '1', name, { from: user1 })
         result = await exchange.submitWinner('2', user2, { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
 
       it('rejects if already cancelled', async () => {
-        await exchange.createBet(token.address, user2, '1', '1', { from: user1 })
+        await exchange.createBet(token.address, user2, '1', '1', name, { from: user1 })
         await exchange.cancelBet('2', { from: user1 })
         result = await exchange.submitWinner('2', user2, { from: user2 }).should.be.rejectedWith(EVM_REVERT)
       })

@@ -20,11 +20,11 @@ contract Exchange is Ownable {
 
   event Deposit(address token, address user, uint256 amount, uint256 balance);
   event Withdraw(address token, address user, uint256 amount, uint256 balance);
-  event BetCreated(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, bool accepted, address winnerMaker, address winnerTaker, uint256 timestamp);
-  event BetCancelled(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, bool accepted, address winnerMaker, address winnerTaker, uint256 timestamp);
-  event BetAccepted(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, bool accepted, address winnerMaker, address winnerTaker, uint256 timestamp);
-  event WinnerSubmitted(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, bool accepted, address winnerMaker, address winnerTaker, uint256 timestamp);
-  event BetClosed(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, bool accepted, address winnerMaker, address winnerTaker, uint256 timestamp);
+  event BetCreated(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, string name, address winnerMaker, address winnerTaker, uint256 timestamp);
+  event BetCancelled(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, string name, address winnerMaker, address winnerTaker, uint256 timestamp);
+  event BetAccepted(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, string name, address winnerMaker, address winnerTaker, uint256 timestamp);
+  event WinnerSubmitted(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, string name, address winnerMaker, address winnerTaker, uint256 timestamp);
+  event BetClosed(uint256 id, address token, address maker, address taker, uint256 amountMaker, uint256 amountTaker, uint256 depositAmount, string name, address winnerMaker, address winnerTaker, uint256 timestamp);
 
   struct _Bet {
     uint256 id;
@@ -34,7 +34,7 @@ contract Exchange is Ownable {
     uint256 amountMaker;
     uint256 amountTaker;
     uint256 amountDeposit;
-    bool accepted; // TODOO: remove this
+    string name;
     address winnerMaker;
     address winnerTaker;
     uint256 timestamp;
@@ -64,7 +64,7 @@ contract Exchange is Ownable {
       return tokens[_token][_user];
   }
   
-  function createBet(address _token, address _taker, uint256 _amountMaker, uint256 _amountTaker) public {
+  function createBet(address _token, address _taker, uint256 _amountMaker, uint256 _amountTaker, string memory _name) public {
     require(msg.sender != _taker, 'taker cannot be sender');
     require(tokens[_token][msg.sender] >= (_amountMaker + depositAmount), 'insufficent balance');
 
@@ -72,9 +72,9 @@ contract Exchange is Ownable {
     tokens[_token][address(this)] += (_amountMaker + depositAmount);
 
     _betCount.increment();
-    bets[_betCount.current()] = _Bet(_betCount.current(), _token, msg.sender, _taker, _amountMaker, _amountTaker, depositAmount, false, ADDRESS_0X0, ADDRESS_0X0, block.timestamp);
+    bets[_betCount.current()] = _Bet(_betCount.current(), _token, msg.sender, _taker, _amountMaker, _amountTaker, depositAmount, _name, ADDRESS_0X0, ADDRESS_0X0, block.timestamp);
 
-    emit BetCreated(_betCount.current(), _token, msg.sender, _taker, _amountMaker, _amountTaker, depositAmount, false, ADDRESS_0X0, ADDRESS_0X0, block.timestamp);
+    emit BetCreated(_betCount.current(), _token, msg.sender, _taker, _amountMaker, _amountTaker, depositAmount, _name, ADDRESS_0X0, ADDRESS_0X0, block.timestamp);
   }
 
   function cancelBet(uint256 _id) public {
@@ -89,7 +89,7 @@ contract Exchange is Ownable {
     tokens[_bet.token][msg.sender] += (_bet.amountMaker + _bet.amountDeposit); // options: add fees or keep deposit
     tokens[_bet.token][address(this)] -= (_bet.amountMaker + _bet.amountDeposit);
 
-    emit BetCancelled(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.accepted, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
+    emit BetCancelled(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.name, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
   }
 
   function acceptBet(uint256 _id) public {
@@ -107,7 +107,7 @@ contract Exchange is Ownable {
     tokens[_bet.token][msg.sender] -= (_bet.amountTaker + _bet.amountDeposit);
     tokens[_bet.token][address(this)] += (_bet.amountTaker + _bet.amountDeposit);
     accepted[_id] = true;
-    emit BetAccepted(_bet.id, _bet.token, _bet.maker, msg.sender, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.accepted, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
+    emit BetAccepted(_bet.id, _bet.token, _bet.maker, msg.sender, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.name, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
   }
 
   function submitWinner(uint256 _id, address _winner) public {
@@ -126,7 +126,7 @@ contract Exchange is Ownable {
       _bet.winnerTaker = _winner;
     }
 
-    emit WinnerSubmitted(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.accepted, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
+    emit WinnerSubmitted(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.name, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
 
     if (_bet.winnerMaker != ADDRESS_0X0 && _bet.winnerTaker != ADDRESS_0X0 && _bet.winnerMaker == _bet.winnerTaker) {
       _closeBet(_id);
@@ -146,6 +146,6 @@ contract Exchange is Ownable {
       tokens[_bet.token][_bet.taker] += (_bet.amountMaker + _bet.amountTaker + _bet.amountDeposit);
     } 
 
-    emit BetClosed(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.accepted, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
+    emit BetClosed(_bet.id, _bet.token, _bet.maker, _bet.taker, _bet.amountMaker, _bet.amountTaker, _bet.amountDeposit, _bet.name, _bet.winnerMaker, _bet.winnerTaker, block.timestamp);
   }
 }
