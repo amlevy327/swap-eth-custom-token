@@ -198,7 +198,7 @@ export const openBetsForAccountSelector = createSelector(
 
 // bets: closed - maker or taker = account
 
-export const closedBetsAccountSelector = createSelector(
+export const closedBetsForAccountSelector = createSelector(
     closedBets, account,
     (closedBets, account) => {
         closedBets = closedBets.filter((b) => b.maker === account || b.taker === account)
