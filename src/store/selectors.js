@@ -173,13 +173,13 @@ const addButtonText = (bet, account) => {
 // bets: open - all
 
 const openBets = state => {
-    const acceptedBets = acceptedBets(state)
-    const cancelledBets = cancelledBets(state)
-    const closedBets = closedBets(state)
+    const accepted = acceptedBets(state)
+    const cancelled = cancelledBets(state)
+    const closed = closedBets(state)
 
-    const openBets = reject(acceptedBets, (bet) => {
-        const betCancelled = cancelledBets.some((b) => b.id === bet.id)
-        const betClosed = closedBets.some((b) => b.id === bet.id)
+    const openBets = reject(accepted, (bet) => {
+        const betCancelled = cancelled.some((b) => b.id === bet.id)
+        const betClosed = closed.some((b) => b.id === bet.id)
         return(betCancelled || betClosed)
     })
 
@@ -188,7 +188,7 @@ const openBets = state => {
 
 // bets: open - maker or taker = account
 
-export const openBetsAccountSelector = createSelector(
+export const openBetsForAccountSelector = createSelector(
     openBets, account,
     (openBets, account) => {
         openBets = openBets.filter((b) => b.maker === account || b.taker === account)
