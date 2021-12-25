@@ -27,8 +27,9 @@ module.exports = async function(callback) {
     console.log('user2: ', user2)
     console.log('user3: ', user3)
 
-    const userStartValue = 100
-    const amountTransfer = 30
+    const userStartValue = 1000
+    const approvalAmount = 1000000
+    const amountTransfer = 200
     const amountMaker1 = 10
     const amountTaker1 = 8
     const name1 = "Bears +3.5"
@@ -61,20 +62,20 @@ module.exports = async function(callback) {
     token.transfer(user3, userStartValue, { from: owner })
     console.log('Tokens transferred from owner to user3: ', userStartValue)
 
-    await token.approve(exchange.address, amountTransfer, { from: user1 })
-    console.log('Exchange approvaed for user1: ', amountTransfer)
+    await token.approve(exchange.address, approvalAmount, { from: user1 })
+    console.log('Exchange approvaed for user1: ', approvalAmount)
 
     await exchange.depositToken(token.address, amountTransfer, { from: user1 })
     console.log('Token deposited for user1: ', amountTransfer)
 
-    await token.approve(exchange.address, amountTransfer, { from: user2 })
-    console.log('Exchange approvaed for user2: ', amountTransfer)
+    await token.approve(exchange.address, approvalAmount, { from: user2 })
+    console.log('Exchange approvaed for user2: ', approvalAmount)
 
     await exchange.depositToken(token.address, amountTransfer, { from: user2 })
     console.log('Token deposited for user2: ', amountTransfer)
 
-    await token.approve(exchange.address, amountTransfer, { from: user3 })
-    console.log('Exchange approvaed for user3: ', amountTransfer)
+    await token.approve(exchange.address, approvalAmount, { from: user3 })
+    console.log('Exchange approvaed for user3: ', approvalAmount)
 
     await exchange.depositToken(token.address, amountTransfer, { from: user3 })
     console.log('Token deposited for user3: ', amountTransfer)
@@ -85,11 +86,11 @@ module.exports = async function(callback) {
     await exchange.createBet(token.address, user1, amountMaker2, amountTaker2, name2, { from: user2 })
     console.log('Bet 2 created by user2 with taker user1')
 
-    await exchange.createBet(token.address, ADDRESS_0x0, amountMaker3, amountTaker3, name3, { from: user3 })
+    await exchange.createBet(token.address, ADDRESS_0x0, amountMaker3, amountTaker3, name3, { from: user1 })
     console.log('Bet 3 created by user3 with taker 0x0')
 
-    //await exchange.cancelBet('1', { from: user1 })
-    //console.log('Bet 1 cancelled')
+    // await exchange.cancelBet('1', { from: user1 })
+    // console.log('Bet 1 cancelled')
 
     //result = await exchange.bets('1')
     //console.log("bet 1:", result)
@@ -100,8 +101,8 @@ module.exports = async function(callback) {
     await exchange.submitWinner('1', winner, { from: user2 })
     console.log('Bet 1 winner submitted by user2: user1 wins')
 
-    await exchange.submitWinner('1', winner, { from: user1 })
-    console.log('Bet 1 winner submitted by user1: user1 wins - should trigger closing')
+    // await exchange.submitWinner('1', winner, { from: user1 })
+    // console.log('Bet 1 winner submitted by user1: user1 wins - should trigger closing')
 
   } catch (error) {
     console.log(error)

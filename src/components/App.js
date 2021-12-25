@@ -7,11 +7,11 @@ import {
   loadAccount,
   loadTokenContract,
   loadExchangeContract,
-  loadExchangeEvents
+  loadExchangeEvents,
+  subscribeToEvents
 } from '../store/interactions'
 import {
-  accountSelector,
-  allBetTypesLoadedSelector
+  accountSelector
 } from '../store/selectors'
 import CustomerDashboard from './CustomerDashboard'
 
@@ -42,6 +42,7 @@ class App extends Component {
     }
 
     await loadExchangeEvents(exchange, dispatch)
+    await subscribeToEvents(exchange, dispatch)
   }
 
   render() {
