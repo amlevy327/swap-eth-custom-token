@@ -199,6 +199,9 @@ export const cancelBet = (account, exchange, bet, dispatch) => {
 // accept bet
 
 export const acceptBet = (account, exchange, bet, dispatch) => {
+  console.log('account', account)
+  console.log('exchange', exchange)
+  console.log('bet.id', bet.id)
   exchange.methods.acceptBet(bet.id).send({ from: account })
   .on('transactionHash', (hash) => {
     dispatch(betAccepting())

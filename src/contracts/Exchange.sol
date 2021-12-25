@@ -117,7 +117,8 @@ contract Exchange is Ownable {
     require(accepted[_id] == true, 'bet not accepted yet');
     require(closed[_id] == false, 'bet already closed');
     require(_bet.maker == msg.sender || _bet.taker == msg.sender, 'sender is not maker or taker');
-
+    // TODO: can't submit winner if already done - 
+    
     if (msg.sender == _bet.maker) {
       _bet.winnerMaker = _winner;
     }

@@ -1,6 +1,8 @@
 import { get, groupBy, reject, maxBy, minBy } from 'lodash'
 import { createSelector } from 'reselect'
 
+const ADDRESS_0x0 = '0x0000000000000000000000000000000000000000'
+
 // WEB3
 
 const account = state => get(state, 'web3.account')
@@ -168,7 +170,7 @@ const addButtonText = (bet, account) => {
       ...bet,
       buttonText
     })
-  }
+}
 
 // bets: open - all
 
@@ -189,12 +191,66 @@ const openBets = state => {
 // bets: open - maker or taker = account
 
 export const openBetsForAccountSelector = createSelector(
-    openBets, account,
-    (openBets, account) => {
+    openBets, account, winnerSubmitted,
+    (openBets, account, winnerSubmitted) => {
         openBets = openBets.filter((b) => b.maker === account || b.taker === account)
+        openBets = decorateOpenBetsForAccount(openBets, account, winnerSubmitted)
         return(openBets)
     }
 )
+
+const decorateOpenBetsForAccount = (openBets, account, winnerSubmitted) => {
+    return(
+        openBets.map((bet) => {
+            bet = addSubmittedWinner(bet, account, winnerSubmitted)
+            bet = addUpdatedMakerTakerWinners(bet, winnerSubmitted)
+        return bet
+      })
+    )
+}
+
+const addSubmittedWinner = (bet, account, winnerSubmitted) => {
+    let submittedWinner = false
+    winnerSubmitted = winnerSubmitted.filter((w) => w.id === bet.id)
+
+    for (let i = 0; i < winnerSubmitted.length; i++) {
+        if ((winnerSubmitted[i].maker === account && winnerSubmitted[i].winnerMaker != ADDRESS_0x0) || (winnerSubmitted[i].taker === account && winnerSubmitted[i].winnerTaker != ADDRESS_0x0)) {
+            submittedWinner = true
+        }
+    }
+
+    console.log('submittedWinner', submittedWinner)
+  
+    return({
+      ...bet,
+      submittedWinner
+    })
+}
+
+const addUpdatedMakerTakerWinners = (bet, winnerSubmitted) => {
+    let updatedWinnerMaker
+    let updatedWinnerTaker
+
+    winnerSubmitted = winnerSubmitted.filter((w) => w.id === bet.id)
+
+    for (let i = 0; i < winnerSubmitted.length; i++) {
+        if (winnerSubmitted[i].winnerMaker != ADDRESS_0x0) {
+            updatedWinnerMaker = winnerSubmitted[i].winnerMaker
+        }
+        if (winnerSubmitted[i].winnerTaker != ADDRESS_0x0) {
+            updatedWinnerTaker = winnerSubmitted[i].winnerTaker
+        }
+    }
+
+    console.log('updatedWinnerMaker', updatedWinnerMaker)
+    console.log('updatedWinnerTaker', updatedWinnerTaker)
+  
+    return({
+      ...bet,
+      updatedWinnerMaker,
+      updatedWinnerTaker
+    })
+}
 
 // bets: closed - maker or taker = account
 
