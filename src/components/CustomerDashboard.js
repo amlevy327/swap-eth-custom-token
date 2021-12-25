@@ -8,16 +8,91 @@ import {
   closedBetsForAccountSelector,
   createdBetsForAccountSelector,
   exchangeSelector,
+  exchangeTokenBalanceSelector,
   openBetsForAccountSelector,
-  winnerSubmittedSelector
+  tokenBalanceSelector,
+  tokenSelector,
+  winnerSubmittedSelector,
+  tokenDepositAmountSelector,
+  tokenWithdrawAmountSelector,
+  newBetSelector
 } from '../store/selectors'
 import {
+  createBet,
   cancelBet,
   acceptBet,
-  submitWinner
+  submitWinner,
+  loadBalances,
+  depositToken,
+  withdrawToken
 } from '../store/interactions'
-// import {
-// } from '../store/actions'
+import {
+  newBetNameChanged,
+  newBetTakerChanged,
+  newBetMakerAmountChanged,
+  newBetTakerAmountChanged,
+  tokenDepositAmountChanged,
+  tokenWithdrawAmountChanged
+} from '../store/actions'
+
+const newBetForm = (props) => {
+  const {
+    dispatch,
+    exchange,
+    token,
+    web3,
+    account,
+    newBet
+  } = props
+
+  return(
+    <form onSubmit={(event) => {
+      event.preventDefault()
+      console.log('button clicked new bet')
+      createBet(web3, account, token, exchange, newBet, dispatch)
+    }}>
+      <div className="form-group small">
+        <label>Name</label>
+        <div className="input-group"></div>
+          <input
+          type="text"
+          placeholder="Describe your bet"
+          onChange={(e) => dispatch(newBetNameChanged(e.target.value))}
+          className="form-control form-control-sm bg-dark text-white"
+          required
+        />
+        <label>Taker</label>
+        <div className="input-group"></div>
+          <input
+          type="text"
+          placeholder="Taker address"
+          onChange={(e) => dispatch(newBetTakerChanged(e.target.value))}
+          className="form-control form-control-sm bg-dark text-white"
+          required
+        />
+        <label>Maker Amount</label>
+        <div className="input-group"></div>
+          <input
+          type="text"
+          placeholder="Amount maker will wager"
+          onChange={(e) => dispatch(newBetMakerAmountChanged(e.target.value))}
+          className="form-control form-control-sm bg-dark text-white"
+          required
+        />
+        <label>Taker Amount</label>
+        <div className="input-group"></div>
+          <input
+          type="text"
+          placeholder="Amount taker will wager"
+          onChange={(e) => dispatch(newBetTakerAmountChanged(e.target.value))}
+          className="form-control form-control-sm bg-dark text-white"
+          required
+        />
+        </div>
+        <button type="submit" className="btn btn-primary btm-sm btn-black">Create Bet</button>
+    </form>
+  )
+}
 
 const showPendingBets = (props) => {
   const {
@@ -54,6 +129,7 @@ const showPendingBets = (props) => {
 const completePendingBetAction = (props, bet) => {
   const {
     account,
+    token,
     exchange,
     dispatch
   } = props
@@ -149,13 +225,111 @@ const showClosedBets = (props) => {
   )
 }
 
-class CustomerDashboard extends Component {
-  // componentWillMount() {
-  //   this.loadBlockchainData(this.props)
-  // }
+const balancesForm = (props) => {
+  const {
+    tokenBalance,
+    exchangeTokenBalance
+  } = props
+  
+  return(
+    <div>
+      <table className="table table-dark table-sm small">
+      <thead>
+          <tr>
+            <th>Token</th>
+            <th>Wallet</th>
+            <th>Exchange</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>$HAKES</td>
+            <td>{tokenBalance}</td>
+            <td>{exchangeTokenBalance}</td>
+          </tr>
+        </tbody>
+      </table>
+      { tokenDepositField(props) }
+      { tokenWithdrawField(props) }
+    </div>
+  )
+}
 
-  // async loadBlockchainData(props) {
-  // }
+const tokenDepositField = (props) => {
+  const {
+    dispatch,
+    exchange,
+    web3,
+    token,
+    tokenDepositAmount,
+    account
+  } = props
+
+  return(
+    <form className="row" onSubmit={(event) => {
+      event.preventDefault()
+      depositToken(web3, account, token, exchange, tokenDepositAmount, dispatch)
+    }}>
+      <div className="col-12 col-sm pr-sm-2">
+        <input
+        type="text"
+        placeholder="$HAKES amount"
+        onChange={(e) => dispatch(tokenDepositAmountChanged(e.target.value))}
+        className="form-control form-control-sm bg-dark text-white"
+        required />
+      </div>
+      <div className="col-12 col-sm-auto pl-sm-0">
+        <button type="submit" className="btn btn-primary btn-black btm-sm">Deposit</button>
+      </div>
+  </form>
+  )
+}
+
+const tokenWithdrawField = (props) => {
+  const {
+    dispatch,
+    exchange,
+    web3,
+    token,
+    tokenWithdrawAmount,
+    account
+  } = props
+
+  return(
+    <form className="row" onSubmit={(event) => {
+      event.preventDefault()
+      withdrawToken(web3, account, token, exchange, tokenWithdrawAmount, dispatch)
+    }}>
+      <div className="col-12 col-sm pr-sm-2">
+        <input
+        type="text"
+        placeholder="$HAKES amount"
+        onChange={(e) => dispatch(tokenWithdrawAmountChanged(e.target.value))}
+        className="form-control form-control-sm bg-dark text-white"
+        required />
+      </div>
+      <div className="col-12 col-sm-auto pl-sm-0">
+        <button type="submit" className="btn btn-primary btn-black btm-sm">Withdraw</button>
+      </div>
+  </form>
+  )
+}
+
+class CustomerDashboard extends Component {
+  componentWillMount() {
+    this.loadBlockchainData(this.props)
+  }
+
+  async loadBlockchainData(props) {
+    const {
+      account,
+      token,
+      exchange,
+      dispatch
+    } = props
+
+    await loadBalances(account, token, exchange, dispatch)
+  }
 
   render() {
     return (
@@ -164,7 +338,10 @@ class CustomerDashboard extends Component {
           Customer Dashboard
         </div>
         <div className="card-body">
-          <Tabs defaultActiveKey="pending" className="bg-dark text-white">
+          <Tabs defaultActiveKey="create" className="bg-dark text-white">
+            <Tab eventKey="create" title="Create" className="bg-dark">
+              { newBetForm(this.props) }
+            </Tab>
             <Tab eventKey="pending" title="Pending" className="bg-dark">
               <table className="table table-dark table-sm small">
                 <thead>
@@ -213,6 +390,9 @@ class CustomerDashboard extends Component {
                 { this.props.showAll ? showClosedBets(this.props) : <Spinner type="table"/> }
               </table>
             </Tab>
+            <Tab eventKey="balances" title="Balances" className="bg-dark">
+              { balancesForm(this.props) }
+            </Tab>
           </Tabs>
         </div>
       </div>
@@ -225,11 +405,17 @@ function mapStateToProps(state) {
   return {
     showAll: allBetTypesLoaded,
     account: accountSelector(state),
+    token: tokenSelector(state),
     exchange: exchangeSelector(state),
     createdBets: createdBetsForAccountSelector(state),
     activeBets: openBetsForAccountSelector(state),
     closedBets: closedBetsForAccountSelector(state),
-    winnersSubmitted: winnerSubmittedSelector(state)
+    winnersSubmitted: winnerSubmittedSelector(state),
+    tokenBalance: tokenBalanceSelector(state),
+    exchangeTokenBalance: exchangeTokenBalanceSelector(state),
+    tokenDepositAmount: tokenDepositAmountSelector(state),
+    tokenWithdrawAmount: tokenWithdrawAmountSelector(state),
+    newBet: newBetSelector(state)
   }
 }
 

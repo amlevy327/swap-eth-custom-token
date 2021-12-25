@@ -168,6 +168,48 @@ export function submittingWinner() {
   }
 }
 
+export function tokenDepositAmountChanged(amount) {
+  return {
+      type: 'TOKEN_DEPOSIT_AMOUNT_CHANGED',
+      amount
+  }
+}
+
+export function tokenWithdrawAmountChanged(amount) {
+  return {
+      type: 'TOKEN_WITHDRAW_AMOUNT_CHANGED',
+      amount
+  }
+}
+
+export function newBetNameChanged(name) {
+  return {
+      type: 'NEW_BET_NAME_CHANGED',
+      name
+  }
+}
+
+export function newBetTakerChanged(taker) {
+  return {
+      type: 'NEW_BET_TAKER_CHANGED',
+      taker
+  }
+}
+
+export function newBetMakerAmountChanged(amount) {
+  return {
+      type: 'NEW_BET_MAKER_AMOUNT_CHANGED',
+      amount
+  }
+}
+
+export function newBetTakerAmountChanged(amount) {
+  return {
+      type: 'NEW_BET_TAKER_AMOUNT_CHANGED',
+      amount
+  }
+}
+
 // COMBO
 
 export function balancesLoading() {

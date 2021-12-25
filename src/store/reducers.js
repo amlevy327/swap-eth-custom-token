@@ -6,7 +6,7 @@ function web3(state = {}, action) {
   case 'WEB3_LOADED':
       return { ...state, connection: action.connection }
   case 'WEB3_ACCOUNT_LOADED':
-      return { ...state, account: action.account }
+      return { ...state, loaded: true, account: action.account }
   default:
       return state
   }
@@ -73,8 +73,22 @@ function exchange(state = {}, action) {
     case 'BALANCES_LOADING':
       return { ...state, balancesLoading: true }
     case 'BALANCES_LOADED':
-        return { ...state, balancesLoading: false }
-    case 'BET_CREATING':
+      return { ...state, balancesLoading: false }
+    case 'TOKEN_DEPOSIT_AMOUNT_CHANGED':
+      return { ...state, tokenDepositAmount: action.amount }
+    case 'TOKEN_WITHDRAW_AMOUNT_CHANGED':
+      return { ...state, tokenWithdrawAmount: action.amount }
+    case 'NEW_BET_NAME_CHANGED':
+      return { ...state, newBet: { ...state.newBet, name: action.name } }
+    case 'NEW_BET_TAKER_CHANGED':
+      return { ...state, newBet: { ...state.newBet, taker: action.taker } }
+    case 'NEW_BET_MAKER_AMOUNT_CHANGED':
+      return { ...state, newBet: { ...state.newBet, amountMaker: action.amount } }
+    case 'NEW_BET_TAKER_AMOUNT_CHANGED':
+      return { ...state, newBet: { ...state.newBet, amountTaker: action.amount } }
+    
+    
+        case 'BET_CREATING':
       return { ...state, betCreating: true }
     case 'BET_CREATED':
       // prevent duplicate orders

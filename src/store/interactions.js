@@ -148,6 +148,10 @@ export const loadExchangeEvents = async (exchange, dispatch) => {
 }
 
 export const loadBalances = async (account, token, exchange, dispatch) => {
+  console.log("account", account)
+  console.log("token", token)
+  console.log("exchange", exchange)
+
   if(typeof account !== 'undefined') {
     // token balance in wallet
     const tokenBalance = await token.methods.balanceOf(account).call()
@@ -161,7 +165,7 @@ export const loadBalances = async (account, token, exchange, dispatch) => {
     dispatch(balancesLoaded())
 
   } else {
-    window.alert('Please login with MetaMask')
+    window.alert('Please login with MetaMask - trying to load balances, but account undefined')
   }
 }
 
@@ -170,10 +174,19 @@ export const loadBalances = async (account, token, exchange, dispatch) => {
 export const createBet = (web3, account, token, exchange, bet, dispatch) => {
   const addressToken = token.options.address
   const addressTaker = bet.taker
-  const amountMaker = web3.utils.toWei(bet.amountMaker, 'ether')
-  const amountTaker = web3.utils.toWei(bet.amountTaker, 'ether')
+  // const amountMaker = web3.utils.toWei(bet.amountMaker, 'ether')
+  // const amountTaker = web3.utils.toWei(bet.amountTaker, 'ether')
+  const amountMaker = bet.amountMaker
+  const amountTaker = bet.amountTaker
+  const name = bet.name
 
-  exchange.methods.createBet(addressToken, addressTaker, amountMaker, amountTaker).send({ from: account })
+  console.log('addressToken', addressToken)
+  console.log('addressTaker', addressTaker)
+  console.log('amountMaker', amountMaker)
+  console.log('amountTaker', amountTaker)
+  console.log('name', name)
+
+  exchange.methods.createBet(addressToken, addressTaker, amountMaker, amountTaker, name).send({ from: account })
   .on('transactionHash', (hash) => {
     dispatch(betCreating())
   })
@@ -227,11 +240,9 @@ export const submitWinner = (account, exchange, bet, winner, dispatch) => {
 // deposit token - TODO: check approving methods
 
 export const depositToken = (web3, account, token, exchange, amount, dispatch) => {
-  amount = web3.utils.toWei(amount, 'ether')
+  //amount = web3.utils.toWei(amount, 'ether')
   
-  token.methods.approve(exchange.options.address, amount).send({ from: account })
-  .on('transactionHash', (hash) => {
-    exchange.methods.depositToken(token.options.address, amount).send({ from: account })
+  exchange.methods.depositToken(token.options.address, amount).send({ from: account })
     .on('transactionHash', (hash) => {
       dispatch(balancesLoading())
     })
@@ -239,13 +250,12 @@ export const depositToken = (web3, account, token, exchange, amount, dispatch) =
       console.error(error)
       window.alert(`There was an error!`)
     })
-  })
 }
 
 // withdraw token
 
 export const withdrawToken = (web3, account, token, exchange, amount, dispatch) => {
-  exchange.methods.withdrawToken(token.options.address, web3.utils.toWei(amount, 'ether')).send({ from: account })
+  exchange.methods.withdrawToken(token.options.address, amount).send({ from: account })
   .on('transactionHash', (hash) => {
     dispatch(balancesLoading())
   })
