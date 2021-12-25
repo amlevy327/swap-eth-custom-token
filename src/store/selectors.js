@@ -8,6 +8,9 @@ const ADDRESS_0x0 = '0x0000000000000000000000000000000000000000'
 const account = state => get(state, 'web3.account')
 export const accountSelector = createSelector(account, a => a)
 
+const accountLoaded = state => get(state, 'web3.loaded', false)
+export const accountLoadedSelector = createSelector(accountLoaded, l => l)
+
 const web3 = state => get(state, 'web3.connection')
 export const web3Selector = createSelector(web3, w => w)
 
@@ -261,3 +264,20 @@ export const closedBetsForAccountSelector = createSelector(
         return(closedBets)
     }
 )
+
+// balances
+
+export const balancesLoadedSelector = createSelector(
+    tokenBalanceLoadedSelector,
+    exchangeTokenBalanceSelector,
+    (tb, eb) => (eb && eb) 
+)
+
+const tokenDepositAmount = state => get(state, 'exchange.tokenDepositAmount', null)
+export const tokenDepositAmountSelector = createSelector(tokenDepositAmount, amount => amount)
+
+const tokenWithdrawAmount = state => get(state, 'exchange.tokenWithdrawAmount', null)
+export const tokenWithdrawAmountSelector = createSelector(tokenWithdrawAmount, amount => amount)
+
+const newBet = state => get(state, 'exchange.newBet', {})
+export const newBetSelector = createSelector(newBet, nb => nb)

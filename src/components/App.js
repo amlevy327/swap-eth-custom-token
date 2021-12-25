@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import './App.css'
 import Navbar from './Navbar'
+import Spinner from './Spinner'
 import {
   loadWeb3,
   loadAccount,
@@ -11,7 +12,9 @@ import {
   subscribeToEvents
 } from '../store/interactions'
 import {
-  accountSelector
+  accountLoadedSelector,
+  contractsLoadedSelector,
+  balancesLoadedSelector
 } from '../store/selectors'
 import CustomerDashboard from './CustomerDashboard'
 
@@ -49,15 +52,20 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <CustomerDashboard />
+        { this.props.showDashboard ? <CustomerDashboard /> : <Spinner /> }
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
+  const accountLoaded = accountLoadedSelector(state)
+  const contractsLoaded = contractsLoadedSelector(state)
+  const balancesLoaded = balancesLoadedSelector(state)
+  
   return {
-    account: accountSelector(state)
+    accountLoaded: accountLoadedSelector(state),
+    showDashboard: accountLoaded && contractsLoaded && balancesLoaded
   }
 }
 
