@@ -13,22 +13,23 @@ import {
   exchangeRateSelector,
   newPurchaseSelector,
   tokenContractLoadedSelector,
-  tokenContractSelector
+  tokenContractSelector,
+  web3Selector
 } from '../store/selectors'
 
-const amountWeiChanged = (props, amountWei) => {
+const amountEthChanged = (props, amountEth) => {
   const {
     dispatch,
     exchangeRate
   } = props
 
-  if (amountWei === "") {
+  if (amountEth === "") {
     document.getElementById("amountCustomToken").value = 0
-    amountWei = 0
+    amountEth = 0
   }
 
-  document.getElementById("amountCustomToken").value = amountWei * exchangeRate
-  dispatch(newPurchaseAmountChanged(parseInt(amountWei), amountWei * exchangeRate))
+  document.getElementById("amountCustomToken").value = amountEth * exchangeRate
+  dispatch(newPurchaseAmountChanged(parseInt(amountEth * (10 ** 18)), amountEth * exchangeRate))
 }
 
 const amountCustomTokenChanged = (props, amountCustomToken) => {
@@ -38,25 +39,26 @@ const amountCustomTokenChanged = (props, amountCustomToken) => {
   } = props
 
   if (amountCustomToken === "") {
-    document.getElementById("amountWei").value = 0
+    document.getElementById("amountEth").value = 0
     amountCustomToken = 0
   }
 
-  document.getElementById("amountWei").value = amountCustomToken / exchangeRate
-  dispatch(newPurchaseAmountChanged(amountCustomToken / exchangeRate, parseInt(amountCustomToken)))
+  document.getElementById("amountEth").value = amountCustomToken / exchangeRate
+  dispatch(newPurchaseAmountChanged(amountCustomToken / exchangeRate * (10 ** 18), parseInt(amountCustomToken)))
 }
 
 const newPurchaseCreation = (props) => {
   const {
+    web3,
     account,
     tokenContract,
     newPurchase,
     dispatch
   } = props
 
-  purchaseTokens(account, tokenContract, newPurchase, dispatch)
+  purchaseTokens(web3, account, tokenContract, newPurchase, dispatch)
   
-  document.getElementById("amountWei").value = ""
+  document.getElementById("amountEth").value = ""
   document.getElementById("amountCustomToken").value = ""
 }
 
@@ -69,10 +71,10 @@ class Converter extends Component {
       }}>
         <div className="">
           <input
-            id = "amountWei"
-            type="number"
-            placeholder="Amount WEI"
-            onChange={(e) => amountWeiChanged(this.props, e.target.value)}
+            id = "amountEth"
+            type="text"
+            placeholder="Amount ETH"
+            onChange={(e) => amountEthChanged(this.props, e.target.value)}
             className='input'
             //className="form-control form-control-sm bg-dark text-white"
             required
@@ -83,7 +85,7 @@ class Converter extends Component {
         <div className="">
           <input
             id = "amountCustomToken"
-            type="number"
+            type="text"
             placeholder="Amount LUV"
             onChange={(e) => amountCustomTokenChanged(this.props, e.target.value)}
             className='input'
@@ -106,6 +108,7 @@ class Converter extends Component {
 
     return {
       showAll: accountLoaded && tokenContractLoaded && exchangeRateLoaded,
+      web3: web3Selector(state),
       account: accountSelector(state),
       tokenContract: tokenContractSelector(state),
       exchangeRate: exchangeRateSelector(state),

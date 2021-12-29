@@ -83,7 +83,7 @@ export const loadTokenContractEvents = async (tokenContract, dispatch) => {
   dispatch(purchasesLoaded(purchases))
 }
 
-export const purchaseTokens = (account, tokenContract, newPurchase, dispatch) => {
+export const purchaseTokens = (web3, account, tokenContract, newPurchase, dispatch) => {
   tokenContract.methods.purchaseTokens().send({ from: account, value: newPurchase.amountWei })
   .on('transactionHash', (hash) => {
     dispatch(newPurchaseAmountChanged(0, 0))
