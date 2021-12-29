@@ -35,5 +35,8 @@ export const tokenNameSelector = createSelector(tokenName, n => n)
 const tokenSymbol = state => get(state, 'token.tokenInfo.symbol', '')
 export const tokenSymbolSelector = createSelector(tokenSymbol, s => s)
 
+const tokenDecimals = state => get(state, 'token.tokenInfo.decimals', '')
+export const tokenDecimalsSelector = createSelector(tokenDecimals, s => s)
+
 const newPurchase = state => get(state, 'token.newPurchase', [])
 export const newPurchaseSelector = createSelector(newPurchase, np => np)
