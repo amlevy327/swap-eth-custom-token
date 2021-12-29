@@ -15,9 +15,10 @@ contract('Token', ([deployer, user1]) => {
   
   const tokenName = "AndrewCoin"
   const tokenSymbol = "DREW"
+  const exchangeRate = 10
 
   beforeEach(async ()=> {
-    token = await Token.new(tokenName, tokenSymbol, { from: deployer })
+    token = await Token.new(tokenName, tokenSymbol, exchangeRate, { from: deployer })
     allEvents = await token.getPastEvents("allEvents", {fromBlock: 0, toBlock: "latest"})
   })
 
@@ -58,6 +59,46 @@ contract('Token', ([deployer, user1]) => {
       it('tracks token symbol', async () => {
         let symbol = await token.symbol()
         symbol.toString().should.equal(tokenSymbol.toString(), 'token symbol is correct')
+      })
+    })
+
+    describe('Exchange rate', () => {
+      it('tracks exchange rate', async () => {
+        let rate = await token.exchangeRate()
+        rate.toString().should.equal(exchangeRate.toString(), 'exchange rate is correct')
+      })
+
+      it('emits ExchangeRateUpdated event', async () => {
+        let event = await allEvents[1]
+        let rate = event.args.updatedExchangeRate
+
+        rate.toString().should.equal(exchangeRate.toString())
+      })
+    })
+  })
+
+  describe('Exchange rate functionality', () => {
+    let result
+    const newExchangeRate = 22
+
+    describe('Success', () => {
+      beforeEach(async ()=> {
+        result = await token.updateExchangeRate(newExchangeRate, { from: deployer })
+      })
+
+      it('tracks updated exchange rate', async () => {
+        let rate = await token.exchangeRate()
+        rate.toString().should.equal(newExchangeRate.toString(), 'updated exchange rate is correct')
+      })
+
+      it('emits a ExchangeRateUpdated event', async () => {
+        expectEvent(result, 'ExchangeRateUpdated', { updatedExchangeRate: newExchangeRate.toString() })
+      })
+    })
+
+    describe('Failure', () => {
+      it('reverts if updateExchangeRate is called by non contract owner', async () => {
+        await token.updateExchangeRate(newExchangeRate, { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
     })
   })
