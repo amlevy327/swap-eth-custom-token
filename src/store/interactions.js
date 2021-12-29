@@ -5,7 +5,7 @@ import {
   web3AccountLoaded,
   tokenContractLoaded,
   exchangeRateLoaded,
-  tokenNameAndSymbolLoaded,
+  tokenInfoLoaded,
   exchangeRateUpdatesLoaded,
   purchasesLoaded,
   purchaseCreating,
@@ -61,11 +61,12 @@ export const getExchangeRate = async (tokenContract, dispatch) => {
   dispatch(exchangeRateLoaded(exchangeRate))
 }
 
-export const getTokenNameAndSymbol = async (tokenContract, dispatch) => {
+export const getTokenInfo = async (tokenContract, dispatch) => {
   const name = await tokenContract.methods.name().call()
   const symbol = await tokenContract.methods.symbol().call()
+  const decimals = await tokenContract.methods.decimals().call()
   
-  dispatch(tokenNameAndSymbolLoaded(name, symbol))
+  dispatch(tokenInfoLoaded(name, symbol, decimals))
 }
 
 export const loadTokenContractEvents = async (tokenContract, dispatch) => {

@@ -8,7 +8,7 @@ import {
   loadAccount,
   loadTokenContract,
   getExchangeRate,
-  getTokenNameAndSymbol,
+  getTokenInfo,
   loadTokenContractEvents,
   subscribeToEvents
 } from '../store/interactions'
@@ -29,7 +29,7 @@ const showContent = (props) => {
 
   return(
     <div>
-      <h1>Buy { tokenName } Tokens!</h1>
+      <h1>Buy { tokenName }!</h1>
       <h2>1 WEI = { exchangeRate } { tokenSymbol }</h2>
       <Converter />
     </div>
@@ -58,7 +58,7 @@ class App extends Component {
     }
 
     await getExchangeRate(tokenContract, dispatch)
-    await getTokenNameAndSymbol(tokenContract, dispatch)
+    await getTokenInfo(tokenContract, dispatch)
     await loadTokenContractEvents(tokenContract, dispatch)
     await subscribeToEvents(tokenContract, dispatch)
   }

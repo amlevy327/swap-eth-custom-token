@@ -38,11 +38,12 @@ export function newPurchaseAmountChanged(amountWei, amountCustomToken) {
   }
 }
 
-export function tokenNameAndSymbolLoaded(name, symbol) {
+export function tokenInfoLoaded(name, symbol, decimals) {
   return {
-      type: 'TOKEN_NAME_AND_SYMBOL_LOADED',
+      type: 'TOKEN_INFO_LOADED',
       name,
-      symbol
+      symbol,
+      decimals
   }
 }
 
