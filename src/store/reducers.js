@@ -14,9 +14,43 @@ function web3(state = {}, action) {
 
 // TOKEN
 function token(state = {}, action) {
+  let index, data
+
   switch(action.type) {
+    case 'TOKEN_CONTRACT_LOADED':
+      return { ...state, loaded: true, contract: action.contract }
+    case 'EXCHANGE_RATE_LOADED':
+      return { ...state, exchangeRate: { ...state.exchangeRate, loaded: true, value: action.exchangeRate } }
+    case 'TOKEN_NAME_AND_SYMBOL_LOADED':
+      return { ...state, tokenInfo: { ...state.tokenInfo, loaded: true, name: action.name, symbol: action.symbol } }
+    case 'EXCHANGE_RATE_UPDATES_LOADED':
+      return { ...state, exchangeRateUpdates: { loaded: true, data: action.exchangeRateUpdates} }
+    case 'PURCHASES_LOADED':
+      return { ...state, purchases: { loaded: true, data: action.purchases} }
+    case 'PURCHASE_CREATING':
+        return { ...state, purchaseCreating: true }
+    case 'PURCHASE_CREATED':
+      // prevent duplicate orders
+      index = state.purchases.data.findIndex(purchase => purchase.id === action.purchase.id);
+      
+      if(index === -1) {
+          data = [...state.purchases.data, action.purchase]
+      } else {
+          data = state.purchases.data
+      }
+      
+      return {
+          ...state,
+          purchaseCreating: false,
+          purchases: {
+              ...state.purchases,
+              data
+          },
+      }
     case 'NEW_PURCHASE_AMOUNT_CHANGED':
       return { ...state, newPurchase: { ...state.newPurchase, amountWei: action.amountWei, amountCustomToken: action.amountCustomToken } }
+    case 'PURCHASES_LOADING':
+      return { ...state, purchasesLoading: true }
     default:
       return state
   }

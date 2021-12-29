@@ -3,13 +3,23 @@ import { connect } from 'react-redux'
 import {
   newPurchaseAmountChanged
 } from '../store/actions'
-
-const exchangeRate = 2 // TODO: TEMP CHANGE THIS - get from contract and use redux store
+import {
+  purchaseTokens
+} from '../store/interactions'
+import { 
+  accountLoadedSelector,
+  accountSelector,
+  exchangeRateLoadedSelector,
+  exchangeRateSelector,
+  newPurchaseSelector,
+  tokenContractLoadedSelector,
+  tokenContractSelector
+} from '../store/selectors'
 
 const amountWeiChanged = (props, amountWei) => {
-  // TODO: update with contract exchange rate
   const {
-    dispatch
+    dispatch,
+    exchangeRate
   } = props
 
   if (amountWei === "") {
@@ -22,9 +32,9 @@ const amountWeiChanged = (props, amountWei) => {
 }
 
 const amountCustomTokenChanged = (props, amountCustomToken) => {
-  // TODO: update with contract exchange rate
   const {
-    dispatch
+    dispatch,
+    exchangeRate
   } = props
 
   if (amountCustomToken === "") {
@@ -36,13 +46,26 @@ const amountCustomTokenChanged = (props, amountCustomToken) => {
   dispatch(newPurchaseAmountChanged(amountCustomToken / exchangeRate, parseInt(amountCustomToken)))
 }
 
-class Converter extends Component {
+const newPurchaseCreation = (props) => {
+  const {
+    account,
+    tokenContract,
+    newPurchase,
+    dispatch
+  } = props
+
+  purchaseTokens(account, tokenContract, newPurchase, dispatch)
   
+  document.getElementById("amountWei").value = ""
+  document.getElementById("amountCustomToken").value = ""
+}
+
+class Converter extends Component {
   render() {
     return (
       <form onSubmit={(event) => {
         event.preventDefault()
-        //makeNewPurchase(dispatch, web3, token, newPurchase, account) // TODO: update when adding interactions
+        newPurchaseCreation(this.props)
       }}>
         <div className="">
           <input
@@ -77,7 +100,16 @@ class Converter extends Component {
   }
   
   function mapStateToProps(state) {
+    const accountLoaded = accountLoadedSelector(state)
+    const tokenContractLoaded = tokenContractLoadedSelector(state)
+    const exchangeRateLoaded = exchangeRateLoadedSelector(state)
+
     return {
+      showAll: accountLoaded && tokenContractLoaded && exchangeRateLoaded,
+      account: accountSelector(state),
+      tokenContract: tokenContractSelector(state),
+      exchangeRate: exchangeRateSelector(state),
+      newPurchase: newPurchaseSelector(state)
     }
   }
   
