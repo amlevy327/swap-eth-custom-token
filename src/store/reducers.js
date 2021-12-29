@@ -12,8 +12,20 @@ function web3(state = {}, action) {
   }
 }
 
+// TOKEN
+function token(state = {}, action) {
+  switch(action.type) {
+    case 'NEW_PURCHASE_AMOUNT_CHANGED':
+      return { ...state, newPurchase: { ...state.newPurchase, amountWei: action.amountWei, amountCustomToken: action.amountCustomToken } }
+    default:
+      return state
+  }
+}
+
+
 const rootReducer = combineReducers({
-  web3
+  web3,
+  token
 })
 
 export default rootReducer
