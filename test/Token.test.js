@@ -102,4 +102,44 @@ contract('Token', ([deployer, user1]) => {
       })
     })
   })
+
+  describe('Purchase tokens functionality', () => {
+    let result
+    const purchaseAmount = 20;
+
+    describe('Success', () => {
+      beforeEach(async ()=> {
+        result = await token.purchaseTokens({ from: user1, value: purchaseAmount })
+      })
+
+      it('tracks balance', async () => {
+        let balance = await token.balanceOf(user1)
+        balance.toString().should.equal((purchaseAmount * exchangeRate).toString(), 'balance is correct')
+      })
+
+      it('tracks total supply', async () => {
+        let totalSupply = await token.totalSupply()
+        totalSupply.toString().should.equal((purchaseAmount * exchangeRate).toString(), 'total supply is correct')
+      })
+
+      it('emits a Transfer event', async () => {
+        const log = result.logs[0]
+        log.event.should.equal('Transfer')
+        const event = log.args
+        event.from.toString().should.equal(ADDRESS_0x0, 'from is correct')
+        event.to.toString().should.equal(user1, 'to is correct')
+        event.value.toString().should.equal((purchaseAmount * exchangeRate).toString(), 'value is correct')
+      })
+
+      it('emits a Purchase event', async () => {
+        expectEvent(result, 'Purchase', { numberTokens: (purchaseAmount * exchangeRate).toString(), exchangeRate: exchangeRate.toString() })
+      })
+    })
+
+    describe('Failure', () => {
+      it('reverts if msg.value is less than 1', async () => {
+        await token.purchaseTokens({ from: user1, value: 0 }).should.be.rejectedWith(EVM_REVERT)
+      })
+    })
+  })
 })
