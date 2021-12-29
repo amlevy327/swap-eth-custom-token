@@ -30,7 +30,7 @@ const showContent = (props) => {
   return(
     <div>
       <h1>Buy { tokenName }!</h1>
-      <h2>1 WEI = { exchangeRate } { tokenSymbol }</h2>
+      <h2>1 ETH = { exchangeRate } { tokenSymbol }</h2>
       <Converter />
     </div>
   )

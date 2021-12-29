@@ -36,5 +36,6 @@ label {
 }
 
 button {
+  border-radius: .3rem;
   margin-top: .75rem;
 }

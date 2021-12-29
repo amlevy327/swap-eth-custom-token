@@ -9,7 +9,7 @@ contract Token is Ownable, ERC20 {
   using Counters for Counters.Counter;
   Counters.Counter private _purchaseCount;
 
-  uint256 public exchangeRate; // token per wei
+  uint256 public exchangeRate; // tokens per ETH
 
   event ExchangeRateUpdated(uint256 updatedExchangeRate);
   event Purchase(uint256 id, uint256 numberTokens, uint256 exchangeRate);
@@ -25,7 +25,7 @@ contract Token is Ownable, ERC20 {
   }
   
   function purchaseTokens() public payable {
-    require(msg.value >= 1, 'must purchase at least one token');
+    require(msg.value >= 1, 'must be at least 1 wei');
     _purchaseCount.increment();
     _mint(msg.sender, msg.value * exchangeRate);
     emit Purchase(_purchaseCount.current(), msg.value * exchangeRate, exchangeRate);

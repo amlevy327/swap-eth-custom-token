@@ -1,6 +1,6 @@
 const Token = artifacts.require('../contracts/Token.sol')
 
-let exchangeRate = "2"
+let exchangeRate = "4000"
 
 module.exports = async function(deployer) {
 
