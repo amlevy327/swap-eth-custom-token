@@ -13,8 +13,8 @@ contract('Token', ([deployer, user1]) => {
   const EVM_REVERT = 'VM Exception while processing transaction: revert'
   const ADDRESS_0x0 = '0x0000000000000000000000000000000000000000'
   
-  const tokenName = "AndrewCoin"
-  const tokenSymbol = "DREW"
+  const tokenName = "LuvToken"
+  const tokenSymbol = "LUV"
   const exchangeRate = 10
 
   beforeEach(async ()=> {
@@ -132,7 +132,7 @@ contract('Token', ([deployer, user1]) => {
       })
 
       it('emits a Purchase event', async () => {
-        expectEvent(result, 'Purchase', { numberTokens: (purchaseAmount * exchangeRate).toString(), exchangeRate: exchangeRate.toString() })
+        expectEvent(result, 'Purchase', { id: '1', numberTokens: (purchaseAmount * exchangeRate).toString(), exchangeRate: exchangeRate.toString() })
       })
     })
 
