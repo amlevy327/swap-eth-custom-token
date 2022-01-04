@@ -1,5 +1,4 @@
 body {
-  /* background-color: yellow; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +25,7 @@ label {
 }
 
 .input {
-  border: 1px solid #333;
+  border: 1px solid black;
   border-radius: .3rem;
   padding: .25rem;
   width: 12em;
