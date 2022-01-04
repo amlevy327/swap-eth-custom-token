@@ -23,10 +23,20 @@ export function tokenContractLoaded(contract) {
   }
 }
 
-export function exchangeRateLoaded(exchangeRate) {
+export function tokenInfoLoaded(name, symbol, decimals, exchangeRate) {
   return {
-    type: 'EXCHANGE_RATE_LOADED',
-    exchangeRate
+      type: 'TOKEN_INFO_LOADED',
+      name,
+      symbol,
+      decimals,
+      exchangeRate
+  }
+}
+
+export function purchasesLoaded(purchases) {
+  return {
+    type: 'PURCHASES_LOADED',
+    purchases
   }
 }
 
@@ -35,29 +45,6 @@ export function newPurchaseAmountChanged(amountWei, amountCustomToken) {
       type: 'NEW_PURCHASE_AMOUNT_CHANGED',
       amountWei,
       amountCustomToken
-  }
-}
-
-export function tokenInfoLoaded(name, symbol, decimals) {
-  return {
-      type: 'TOKEN_INFO_LOADED',
-      name,
-      symbol,
-      decimals
-  }
-}
-
-export function exchangeRateUpdatesLoaded(exchangeRateUpdates) {
-  return {
-    type: 'EXCHANGE_RATE_UPDATES_LOADED',
-    exchangeRateUpdates
-  }
-}
-
-export function purchasesLoaded(purchases) {
-  return {
-    type: 'PURCHASES_LOADED',
-    purchases
   }
 }
 

@@ -19,10 +19,8 @@ function token(state = {}, action) {
   switch(action.type) {
     case 'TOKEN_CONTRACT_LOADED':
       return { ...state, loaded: true, contract: action.contract }
-    case 'EXCHANGE_RATE_LOADED':
-      return { ...state, exchangeRate: { ...state.exchangeRate, loaded: true, value: action.exchangeRate } }
     case 'TOKEN_INFO_LOADED':
-      return { ...state, tokenInfo: { ...state.tokenInfo, loaded: true, name: action.name, symbol: action.symbol, decimals: action.decimals } }
+      return { ...state, tokenInfo: { ...state.tokenInfo, loaded: true, name: action.name, symbol: action.symbol, decimals: action.decimals, exchangeRate: action.exchangeRate } }
     case 'EXCHANGE_RATE_UPDATES_LOADED':
       return { ...state, exchangeRateUpdates: { loaded: true, data: action.exchangeRateUpdates} }
     case 'PURCHASES_LOADED':

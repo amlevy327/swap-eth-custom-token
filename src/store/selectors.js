@@ -23,7 +23,7 @@ export const tokenContractSelector = createSelector(tokenContract, t => t)
 const exchangeRateLoaded = state => get(state, 'token.exchangeRate.loaded', false)
 export const exchangeRateLoadedSelector = createSelector(exchangeRateLoaded, l => l)
 
-const exchangeRate = state => get(state, 'token.exchangeRate.value', '0')
+const exchangeRate = state => get(state, 'token.tokenInfo.exchangeRate', '0')
 export const exchangeRateSelector = createSelector(exchangeRate, e => e)
 
 const tokenInfoLoaded = state => get(state, 'token.tokenInfo.loaded', false)
@@ -36,7 +36,13 @@ const tokenSymbol = state => get(state, 'token.tokenInfo.symbol', '')
 export const tokenSymbolSelector = createSelector(tokenSymbol, s => s)
 
 const tokenDecimals = state => get(state, 'token.tokenInfo.decimals', '')
-export const tokenDecimalsSelector = createSelector(tokenDecimals, s => s)
+export const tokenDecimalsSelector = createSelector(tokenDecimals, d => d)
+
+const tokenOwner = state => get(state, 'token.tokenInfo.owner', '')
+export const tokenOwnerSelector = createSelector(tokenOwner, o => o)
 
 const newPurchase = state => get(state, 'token.newPurchase', [])
 export const newPurchaseSelector = createSelector(newPurchase, np => np)
+
+const newExchangeRate = state => get(state, 'token.newExchangeRate.amount', '')
+export const newExchangeRateSelector = createSelector(newExchangeRate, ne => ne)

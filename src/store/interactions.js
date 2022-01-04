@@ -4,9 +4,7 @@ import {
   web3Loaded,
   web3AccountLoaded,
   tokenContractLoaded,
-  exchangeRateLoaded,
   tokenInfoLoaded,
-  exchangeRateUpdatesLoaded,
   purchasesLoaded,
   purchaseCreating,
   purchaseCreated,
@@ -56,26 +54,16 @@ export const loadTokenContract = async (web3, networkId, dispatch) => {
   }
 }
 
-export const getExchangeRate = async (tokenContract, dispatch) => {
-  const exchangeRate = await tokenContract.methods.exchangeRate().call()
-  dispatch(exchangeRateLoaded(exchangeRate))
-}
-
 export const getTokenInfo = async (tokenContract, dispatch) => {
   const name = await tokenContract.methods.name().call()
   const symbol = await tokenContract.methods.symbol().call()
   const decimals = await tokenContract.methods.decimals().call()
+  const exchangeRate = await tokenContract.methods.exchangeRate().call()
   
-  dispatch(tokenInfoLoaded(name, symbol, decimals))
+  dispatch(tokenInfoLoaded(name, symbol, decimals, exchangeRate))
 }
 
 export const loadTokenContractEvents = async (tokenContract, dispatch) => {
-  // exchange rate updates
-  const exchangeRateUpdatesStream = await tokenContract.getPastEvents('ExchangeRateUpdated', { fromBlock: 0, toBlock: 'latest' })
-  console.log('exchangeRateUpdatesStream: ', exchangeRateUpdatesStream)
-  const exchangeRateUpdates = exchangeRateUpdatesStream.map((event) => event.returnValues)
-  dispatch(exchangeRateUpdatesLoaded(exchangeRateUpdates))
-
   // purchases
   const purchasesStream = await tokenContract.getPastEvents('Purchase', { fromBlock: 0, toBlock: 'latest' })
   console.log('purchasesStream: ', purchasesStream)
@@ -96,11 +84,6 @@ export const purchaseTokens = (web3, account, tokenContract, newPurchase, dispat
 }
 
 export const subscribeToEvents = async (tokenContract, dispatch) => {
-  // exchange rate updated
-  // token.events.ExchangeRateUpdated({}, (error, event) => {
-  //   dispatch(exchangeRateLoaded())
-  // })
-
   // purchases
   tokenContract.events.Purchase({}, (error, event) => {
     dispatch(purchaseCreated(event.returnValues))

@@ -7,16 +7,16 @@ import {
   loadWeb3,
   loadAccount,
   loadTokenContract,
-  getExchangeRate,
   getTokenInfo,
   loadTokenContractEvents,
   subscribeToEvents
 } from '../store/interactions'
 import {
-  exchangeRateLoadedSelector,
+  accountSelector,
   exchangeRateSelector,
   tokenInfoLoadedSelector,
   tokenNameSelector,
+  tokenOwnerSelector,
   tokenSymbolSelector
 } from '../store/selectors'
 
@@ -57,7 +57,6 @@ class App extends Component {
       window.alert('Token smart contract not detected on the current network. Please select another network with Metamask.')
     }
 
-    await getExchangeRate(tokenContract, dispatch)
     await getTokenInfo(tokenContract, dispatch)
     await loadTokenContractEvents(tokenContract, dispatch)
     await subscribeToEvents(tokenContract, dispatch)
@@ -73,14 +72,15 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const exchangeRateLoaded = exchangeRateLoadedSelector(state)
   const tokenInfoLoaded = tokenInfoLoadedSelector(state)
   
   return {
-    showAll: tokenInfoLoaded && exchangeRateLoaded,
+    showAll: tokenInfoLoaded,
     tokenName: tokenNameSelector(state),
     tokenSymbol: tokenSymbolSelector(state),
-    exchangeRate: exchangeRateSelector(state)
+    exchangeRate: exchangeRateSelector(state),
+    tokenOwner: tokenOwnerSelector(state),
+    account: accountSelector(state)
   }
 }
 
