@@ -54,28 +54,17 @@ module.exports = {
      //port: 8545,            // cli - Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-    // kovan: {
-    //   provider: () => {
-    //     return new HDWalletProvider(
-    //       privateKeys.split(','), // array of account private keys
-    //       `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`  // url to ethereum node
-    //       )
-    //   },
-    //   gas: 5000000,
-    //   gasPrice: 25000000000,
-    //   network_id: 42
-    // },
-    // rinkeby: {
-    //   provider: () => {
-    //     return new HDWalletProvider(
-    //       privateKeys.split(','), // array of account private keys
-    //       `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`  // url to ethereum node
-    //       )
-    //   },
-    //   gas: 5000000,
-    //   gasPrice: 25000000000,
-    //   network_id: 4
-    // }
+    rinkeby: {
+      provider: () => {
+        return new HDWalletProvider(
+          privateKeys.split(','), // array of account private keys
+          `https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`  // url to ethereum node
+          )
+      },
+      gas: 5000000,
+      gasPrice: 25000000000,
+      network_id: 4
+    }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
