@@ -79,7 +79,7 @@ class Converter extends Component {
             //className="form-control form-control-sm bg-dark text-white"
             required
           />
-          <label>WEI</label>
+          <label>ETH</label>
         </div>
         <label>=</label>
         <div className="">
