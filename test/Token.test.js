@@ -34,22 +34,6 @@ contract('Token', ([deployer, user1]) => {
       })
     })
 
-    describe('Ownable', () => {
-      it('transfers ownership to deployer', async () => {
-        let contractOwner = await token.owner()
-        contractOwner.toString().should.equal(deployer.toString(), 'contract owner is correct')
-      })
-
-      it('emits OwnershipTransferred event', async () => {
-        let event = await allEvents[0]
-        let previousOwner = event.args.previousOwner
-        let newOwner = event.args.newOwner
-
-        previousOwner.toString().should.equal(ADDRESS_0x0.toString())
-        newOwner.toString().should.equal(deployer.toString())
-      })
-    })
-
     describe('ERC20', () => {
       it('tracks token name', async () => {
         let name = await token.name()
@@ -66,39 +50,6 @@ contract('Token', ([deployer, user1]) => {
       it('tracks exchange rate', async () => {
         let rate = await token.exchangeRate()
         rate.toString().should.equal(exchangeRate.toString(), 'exchange rate is correct')
-      })
-
-      it('emits ExchangeRateUpdated event', async () => {
-        let event = await allEvents[1]
-        let rate = event.args.updatedExchangeRate
-
-        rate.toString().should.equal(exchangeRate.toString())
-      })
-    })
-  })
-
-  describe('Exchange rate functionality', () => {
-    let result
-    const newExchangeRate = 22
-
-    describe('Success', () => {
-      beforeEach(async ()=> {
-        result = await token.updateExchangeRate(newExchangeRate, { from: deployer })
-      })
-
-      it('tracks updated exchange rate', async () => {
-        let rate = await token.exchangeRate()
-        rate.toString().should.equal(newExchangeRate.toString(), 'updated exchange rate is correct')
-      })
-
-      it('emits a ExchangeRateUpdated event', async () => {
-        expectEvent(result, 'ExchangeRateUpdated', { updatedExchangeRate: newExchangeRate.toString() })
-      })
-    })
-
-    describe('Failure', () => {
-      it('reverts if updateExchangeRate is called by non contract owner', async () => {
-        await token.updateExchangeRate(newExchangeRate, { from: user1 }).should.be.rejectedWith(EVM_REVERT)
       })
     })
   })

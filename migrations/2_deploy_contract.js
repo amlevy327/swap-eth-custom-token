@@ -1,6 +1,8 @@
 const Token = artifacts.require('../contracts/Token.sol')
 
-let exchangeRate = "4000"
+let tokenName = "LuvToken"
+let tokenSymbol = "LUV"
+let exchangeRate = "4000" // tokens per ETH
 
 module.exports = async function(deployer) {
 
@@ -8,8 +10,8 @@ module.exports = async function(deployer) {
   const owner = accounts[0]
 
   await deployer.deploy(Token,
-    "LuvToken",
-    "LUV",
+    tokenName,
+    tokenSymbol,
     exchangeRate,
     { from: owner }
   )
