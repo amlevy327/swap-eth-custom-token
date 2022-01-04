@@ -8,13 +8,13 @@ A simple swap from ETH to a custom ERC-20 token
 # Requirements
 
 For Rinkeby interaction and deployment:
-1. Install [MetaMask](https://metamask.io/download) and create a free account
-2. Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
+-Install [MetaMask](https://metamask.io/download) and create a free account\
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
 
-For local deployment:\
-1. Install [MetaMask](https://metamask.io/download) and create a free account
-2. Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees
-3. Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
+For local deployment:
+-Install [MetaMask](https://metamask.io/download) and create a free account\
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees\
+-Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
 
 # Usage
 
@@ -37,13 +37,21 @@ npm i
 ## Setup .env file
 
 Visit [Infura](https://infura.io/) to create profile and project.\
-Create .env file and add:\
+Create .env file and add:
 > PRIVATE_KEYS="{YOUR_KEY_HERE}"\
 > INFURA_API_KEY={YOUR_KEY_HERE}
 
 ## Test locally
 
 npx truffle test
+
+## Customize your token - update migration files
+
+Modify 2_deploy_contract.js for your custom token.\
+You may change the following parameters:\
+-tokenName\
+-tokenSymbol\
+-exchangeRate (tokens per ETH)
 
 ## Deploy locally
 
