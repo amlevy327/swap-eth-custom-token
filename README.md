@@ -8,13 +8,13 @@ A simple swap from ETH to a custom ERC-20 token
 # Requirements
 
 For Rinkeby interaction and deployment:
-- Install [MetaMask](https://metamask.io/download) and create a free account
-- Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
+-Install [MetaMask](https://metamask.io/download) and create a free account\
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
 
 For local deployment:
-- Install [MetaMask](https://metamask.io/download) and create a free account
-- Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees
-- Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
+-Install [MetaMask](https://metamask.io/download) and create a free account\
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees\
+-Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
 
 # Usage
 
@@ -37,7 +37,7 @@ npm i
 ### Setup .env file
 
 Visit [Infura](https://infura.io/) to create profile and project.\
-Create .env file and add:\
+Create .env file and add:
 > PRIVATE_KEYS="{YOUR_KEY_HERE}"\
 > INFURA_API_KEY={YOUR_KEY_HERE}
 
