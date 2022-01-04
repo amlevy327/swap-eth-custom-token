@@ -3,21 +3,47 @@ swap-eth-custom-token
 
 # Description
 
-A simple swap from ETH to a custom ERC-20 token.
+A simple swap from ETH to a custom ERC-20 token
 
 # Usage
 
 ## Interact with sample project deployed on Rinkeby test net (LUV token)
 
-## Download and test locally
+## Clone repo
 
+Using cli, clone code from github
 ```bash
 git clone https://github.com/amlevy327/swap-eth-custom-token
 ```
 
-## Download and run locally
+Enter project folder
+```bash
+cd swap-eth-custom-token
+```
 
-## Download and deploy on Rinkeby test net
+## Setup locally
+
+Install packages
+```bash
+npm i
+```
+
+## Test locally
+
+## Run locally
+
+Install [Ganache](https://trufflesuite.com/ganache/).
+Run on port 7545.
+Import private keys from Ganache into MetaMask.
+
+Start development server
+```bash
+yarn start
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Deploy on Rinkeby test net
 
 # Getting Started with Create React App
 
