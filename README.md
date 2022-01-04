@@ -20,9 +20,9 @@ For local deployment:
 
 ## Interact with sample project deployed on Rinkeby test net (LUV token)
 
-To interact with a deployed version of this project you can visit:\
--Deployed contract on [Etherscan](https://rinkeby.etherscan.io/address/0x4D915D76f51a6Ca80C20DE2eEf7ea56D67DFf4ED)\
--Front end dapp [here](https://swap-eth-luv.surge.sh/)
+To interact with a deployed version of this project you can visit:
+- Deployed contract on [Etherscan](https://rinkeby.etherscan.io/address/0x4D915D76f51a6Ca80C20DE2eEf7ea56D67DFf4ED)\
+- Front end dapp [here](https://swap-eth-luv.surge.sh/)
 
 ## Interact with local clone
 
@@ -34,26 +34,25 @@ cd swap-eth-custom-token
 npm i
 ```
 
-## Setup .env file
+### Setup .env file
 
 Visit [Infura](https://infura.io/) to create profile and project.\
 Create .env file and add:
 > PRIVATE_KEYS="{YOUR_KEY_HERE}"\
 > INFURA_API_KEY={YOUR_KEY_HERE}
 
-## Test locally
+### Test locally
 
 npx truffle test
 
-## Customize your token - update migration files
-
+### Customize your token - update migration files
 Modify 2_deploy_contract.js for your custom token.\
-You may change the following parameters:\
--tokenName\
--tokenSymbol\
--exchangeRate (tokens per ETH)
+You may change the following parameters:
+- tokenName
+- tokenSymbol
+- exchangeRate (tokens per ETH)
 
-## Deploy locally
+### Deploy locally
 
 1. Start Ganache on port 7545
 2. [Import](https://metamask.zendesk.com/hc/en-us/articles/360015489331-How-to-import-an-Account) your private key (make sure is a Ganache private key only!)
@@ -63,7 +62,7 @@ npx truffle migrate --network development --reset
 yarn start
 ```
 
-## Deploy on Rinkeby test net
+### Deploy on Rinkeby test net
 
 Start development server and migrate contracts
 ```
