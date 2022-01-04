@@ -8,20 +8,20 @@ A simple swap from ETH to a custom ERC-20 token
 # Requirements
 
 For Rinkeby interaction and deployment:
--Install [MetaMask](https://metamask.io/download) and create a free account\
--Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
+- Install [MetaMask](https://metamask.io/download) and create a free account
+- Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
 
 For local deployment:
--Install [MetaMask](https://metamask.io/download) and create a free account\
--Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees\
--Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
+- Install [MetaMask](https://metamask.io/download) and create a free account
+- Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees
+- Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchain
 
 # Usage
 
 ## Interact with sample project deployed on Rinkeby test net (LUV token)
 
 To interact with a deployed version of this project you can visit:
-- Deployed contract on [Etherscan](https://rinkeby.etherscan.io/address/0x4D915D76f51a6Ca80C20DE2eEf7ea56D67DFf4ED)\
+- Deployed contract on [Etherscan](https://rinkeby.etherscan.io/address/0x4D915D76f51a6Ca80C20DE2eEf7ea56D67DFf4ED)
 - Front end dapp [here](https://swap-eth-luv.surge.sh/)
 
 ## Interact with local clone
