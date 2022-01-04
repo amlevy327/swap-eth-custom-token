@@ -1,3 +1,24 @@
+# Name
+swap-eth-custom-token
+
+# Description
+
+A simple swap from ETH to a custom ERC-20 token.
+
+# Usage
+
+## Interact with sample project deployed on Rinkeby test net (LUV token)
+
+## Download and test locally
+
+```bash
+git clone https://github.com/amlevy327/swap-eth-custom-token
+```
+
+## Download and run locally
+
+## Download and deploy on Rinkeby test net
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
