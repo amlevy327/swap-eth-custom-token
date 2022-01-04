@@ -5,64 +5,65 @@ swap-eth-custom-token
 
 A simple swap from ETH to a custom ERC-20 token
 
+# Requirements
+
+For Rinkeby interaction and deployment:
+-Install [MetaMask](https://metamask.io/download) and create a free account
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/)
+
+For local deployment:
+-Install [MetaMask](https://metamask.io/download) and create a free account
+-Obtain [Rinkeby test ETH](https://faucet.rinkeby.io/) for test gas fees
+-Install [Ganache](https://trufflesuite.com/ganache/) to run local blockchin
+
 # Usage
 
 ## Interact with sample project deployed on Rinkeby test net (LUV token)
 
-## Clone repo
+To interact with a deployed version of this project you can visit:
+-Deployed contract on [Etherscan](https://rinkeby.etherscan.io/address/0x4D915D76f51a6Ca80C20DE2eEf7ea56D67DFf4ED)
+-Front end dapp [here](https://swap-eth-luv.surge.sh/)
 
-Using cli, clone code from github
-```bash
+## Interact with local clone
+
+### Clone repo and install packages
+
+```
 git clone https://github.com/amlevy327/swap-eth-custom-token
-```
-
-Enter project folder
-```bash
 cd swap-eth-custom-token
-```
-
-## Setup locally
-
-Install packages
-```bash
 npm i
 ```
+
+## Setup .env file
+
 Visit [Infura](https://infura.io/) to create profile and project.
 Create .env file and add:
-INFURA_API_KEY={YOUR_KEY_HERE}
+> PRIVATE_KEYS="{YOUR_KEY_HERE}"
+> INFURA_API_KEY={YOUR_KEY_HERE}
 
 ## Test locally
 
-Run tests
-```bash
 npx truffle test
-```
 
 ## Deploy locally
 
-Install [Ganache](https://trufflesuite.com/ganache/).
-Run on port 7545.
-Import private keys from Ganache into MetaMask.
-
-Start development server and migrate contracts
-```bash
+1. Start Ganache on port 7545
+2. [Import](https://metamask.zendesk.com/hc/en-us/articles/360015489331-How-to-import-an-Account) your private key (make sure is a Ganache private key only!)
+3. Start development server and migrate contracts
+```
 npx truffle migrate --network development --reset
 yarn start
 ```
 
 ## Deploy on Rinkeby test net
 
-Obtain [Test ETH](https://faucet.rinkeby.io/).
-
 Start development server and migrate contracts
-```bash
+```
 npx truffle migrate --network rinkeby --reset
 yarn start
 ```
 
-
-
-# Getting Started with Create React App
+# REACT BOILERPLATE: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
