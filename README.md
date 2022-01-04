@@ -27,23 +27,40 @@ Install packages
 ```bash
 npm i
 ```
+Visit [Infura](https://infura.io/) to create profile and project.
+Create .env file and add:
+INFURA_API_KEY={YOUR_KEY_HERE}
 
 ## Test locally
 
-## Run locally
+Run tests
+```bash
+npx truffle test
+```
+
+## Deploy locally
 
 Install [Ganache](https://trufflesuite.com/ganache/).
 Run on port 7545.
 Import private keys from Ganache into MetaMask.
 
-Start development server
+Start development server and migrate contracts
 ```bash
+npx truffle migrate --network development --reset
 yarn start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
 ## Deploy on Rinkeby test net
+
+Obtain [Test ETH](https://faucet.rinkeby.io/).
+
+Start development server and migrate contracts
+```bash
+npx truffle migrate --network rinkeby --reset
+yarn start
+```
+
+
 
 # Getting Started with Create React App
 
